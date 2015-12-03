@@ -8,9 +8,17 @@ python 交流群 172965579
 
 `pip install gevent`
 
+####设置
+在config.py 输入邮箱账号密码,遇到错误会发送邮件到你的邮箱
+
+如果使用getweather.py ,请到 http://developer.baidu.com/map/carapi-7.htm 申请api
+
 ## 运行
 `python main.py`
 
 如果是部署在服务器上请在5秒内, 用浏览器访问服务器的8000端口.
+
 如果本地,可以在访问127.0.0.1:8000, 或者在文件夹内找到image.jpg 并扫码
+
+
 
