@@ -262,7 +262,7 @@ class Smartqq():
         except urllib2.HTTPError, e:
             logging.warning('{0}'.format(e))
             self.gerror += 1
-            if self.gerr=`=jedi=0, or > 10:=`= (*_*sub*_*, content, to_list=TO_LIST) =`=jedi=`=
+            if self.gerror > 10:
                 sendemail('poll2错误次数太多', u'请查看输入日志')
                 logging.error(u'poll2错误次数太多')
                 exit()
