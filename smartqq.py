@@ -49,6 +49,7 @@ class Smartqq():
         self.psessionid = ''
         self.friendsInfo = {}
         self.groupInfo = {}
+        self.gerror = 0
         self.cookie = cookielib.CookieJar()
         self.opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(self.cookie))
         urllib2.install_opener(self.opener)
@@ -257,8 +258,14 @@ class Smartqq():
         #logging.info('send to poll msg_id')
         try:
             html = self.opener.open(request).read()
+            self.gerror = 0
         except urllib2.HTTPError, e:
             logging.warning('{0}'.format(e))
+            self.gerror += 1
+            if self.gerr=`=jedi=0, or > 10:=`= (*_*sub*_*, content, to_list=TO_LIST) =`=jedi=`=
+                sendemail('poll2错误次数太多', u'请查看输入日志')
+                logging.error(u'poll2错误次数太多')
+                exit()
             return None
         jsonData = json.loads(html)
         logging.debug(html)

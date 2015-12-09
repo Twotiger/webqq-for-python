@@ -5,7 +5,6 @@
 #    > Created Time: 2015/11/2 19:17:06
 
 import os
-import json
 import gevent
 from gevent.wsgi import WSGIServer
 import smartqq

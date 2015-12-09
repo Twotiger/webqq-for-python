@@ -35,7 +35,8 @@ class Weather(BaseDict):
         request = urllib2.Request(url=self.url.format(city=city.encode('utf-8'), ak=self.ak),headers=self.headers)
         try:
             result = urllib2.urlopen(request).read()
-        except urllib2.HTTPError:
+        except:
+        #except urllib2.HTTPError:
             print "获取JSON失败@getweather.py"
             return None
         jsondata = json.loads(result)
