@@ -41,7 +41,7 @@ class Smartqq():
         self.__salt = ''
         self.msgId= randint(10000000,44444444)
         self.status= 'online'
-        self.action = 47
+        self.action = 2067
         self.ptwebqq = ''
         self.vfwebqq = ''
         self.uid = 0
@@ -130,17 +130,18 @@ class Smartqq():
         html = result.read()
         jsonData = json.loads(html)
         self.vfwebqq = jsonData['result']['vfwebqq']
+        assert self.vfwebqq
         logging.debug(self.vfwebqq)
 
     def requestdweb2qq(self):
         """
         """
-        logging.debug(u'REQUEST d.web2qq.com')
-        url = "http://d.web2.qq.com/channel/login2"
+        logging.debug(u'REQUEST d1.web2qq.com')
+        url = "http://d1.web2.qq.com/channel/login2"
         headers={'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:38.0) Gecko/20100101 Firefox/38.0)',
-                    'Host':'d.web2.qq.com',
-                    'Origin':'http://d.web2.qq.com',
-                    'Referer':'http://d.web2.qq.com/proxy.html?v=20130916001&callback=1&id=2' # 等待检测
+                    'Host':'d1.web2.qq.com',
+                    'Origin':'http://d1.web2.qq.com',
+                    'Referer':'http://d1.web2.qq.com/proxy.html?v=20130916001&callback=1&id=2' # 等待检测
                 }
         data = {'ptwebqq':self.ptwebqq,
                 'clientid':53999199,
@@ -245,12 +246,17 @@ class Smartqq():
         self.dics = arg
 
     def poll2(self):
-        url = 'http://d.web2.qq.com/channel/poll2'
-        data = {"ptwebqq":self.ptwebqq,"clientid":53999199,"psessionid":self.psessionid,"key":""}
+        #url = 'http://d.web2.qq.com/channel/poll2'
+        url = 'http://d1.web2.qq.com/channel/poll2'
+        data = {"ptwebqq":self.ptwebqq, 
+                "clientid":53999199,
+                "psessionid":self.psessionid,
+                "key":""
+                }
         headers={'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:38.0) Gecko/20100101 Firefox/38.0)',
-                    'Host':'d.web2.qq.com',
-                    'Origin':'http://d.web2.qq.com',
-                    'Referer':'http://d.web2.qq.com/proxy.html?v=20130916001&callback=1&id=2' # 等待检测
+                    'Host':'d1.web2.qq.com',
+                    'Origin':'http://d1.web2.qq.com',
+                    'Referer':'http://d1.web2.qq.com/proxy.html?v=20151105001&callback=1&id=2' # 等待检测
                 }
         postdata = urllib.urlencode({'r':json.dumps(data)})
 
@@ -269,6 +275,8 @@ class Smartqq():
             return None
         jsonData = json.loads(html)
         logging.debug(html)
+
+
         retcode = jsonData.get('retcode')
         if retcode == 0 :
             try:
@@ -276,7 +284,7 @@ class Smartqq():
                     content = jsonData['result'][0]['value']['content'][1]
                     fromuin = jsonData['result'][0]['value']['from_uin']
                     #senduin = jsonData['result'][0]['value']['send_uin']    # 发送者的uin
-                    value = ['group_message', fromuin, content, jsonData['result'][0]['value']['info_seq']]
+                    value = ['group_message', fromuin, content]
                     #               群      群的uin    文本          群qq
                     #print 'value',value
                     return value
@@ -300,11 +308,11 @@ class Smartqq():
         """
         #r:{"to":3497160265,"content":"[\"44\",[\"font\",{\"name\":\"宋体\",\"size\":10,\"style\":[0,0,0],\"color\":\"000000\"}]]","face":0,
         # "clientid":53999199,"msg_id":80120003,"psessionid":""}\
-        url = 'http://d.web2.qq.com/channel/send_qun_msg2'
+        url = 'http://d1.web2.qq.com/channel/send_qun_msg2'
         headers={'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:38.0) Gecko/20100101 Firefox/38.0)',
-                    'Host':'d.web2.qq.com',
-                    'Origin':'http://d.web2.qq.com',
-                    'Referer':'http://d.web2.qq.com/proxy.html?v=20130916001&callback=1&id=2'
+                    'Host':'d1.web2.qq.com',
+                    'Origin':'http://d1.web2.qq.com',
+                    'Referer':'http://d1.web2.qq.com/proxy.html?v=20151105001&callback=1&id=2'
                 }
         try:
             data = {"group_uin":group_uin,"content":content,"face":30027,"clientid":53999199,
@@ -328,7 +336,7 @@ class Smartqq():
     def send_buddy_msg2(self):
         """发送好友信息
         """
-        url = 'http://d.web2.qq.com/channel/send_buddy_msg2'
+        url = 'http://d1.web2.qq.com/channel/send_buddy_msg2' # ????
 
 
     def requestwqqcom(self):
@@ -348,8 +356,8 @@ class Smartqq():
         self.requestptlogin2qqcom() # 维持
         self.requestweb2qq()
         self.requestdweb2qq() # d.web2.qq
-        self.get_user_friends2()
-        self.get_group_name()
+        #self.get_user_friends2()
+        #self.get_group_name()
         while 1:
             data = self.poll2()
             if data: # 如果有数据，去找字典
