@@ -119,7 +119,7 @@ class Smartqq():
         """
         得到 vfwebqq
         """
-        logging.debug(u'REQUEST web2.qq.com')
+        logging.debug(u'REQUEST s.web2.qq.com')
         url = "http://s.web2.qq.com/api/getvfwebqq?ptwebqq={0}&clientid=53999199&psessionid=&t={1}".format(self.ptwebqq, int(time()*1000))
         headers={'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:38.0) Gecko/20100101 Firefox/38.0)',
                     'Host':'s.web2.qq.com',
@@ -135,13 +135,14 @@ class Smartqq():
 
     def requestdweb2qq(self):
         """
+        post 请求
         """
         logging.debug(u'REQUEST d1.web2qq.com')
         url = "http://d1.web2.qq.com/channel/login2"
         headers={'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:38.0) Gecko/20100101 Firefox/38.0)',
                     'Host':'d1.web2.qq.com',
                     'Origin':'http://d1.web2.qq.com',
-                    'Referer':'http://d1.web2.qq.com/proxy.html?v=20130916001&callback=1&id=2' # 等待检测
+                    'Referer':'http://d1.web2.qq.com/proxy.html?v=20151105001&callback=1&id=2' # 等待检测
                 }
         data = {'ptwebqq':self.ptwebqq,
                 'clientid':53999199,
@@ -241,6 +242,27 @@ class Smartqq():
         #得到自己的信息
         url = 'http://s.web2.qq.com/api/get_self_info2?t={0}'.format(int(time()*1000))
 
+    def get_recent_list2(self):
+        """post 请求
+        """
+        url = 'http://d1.web2.qq.com/channel/get_recent_list2'
+        headers = {
+                'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:38.0) Gecko/20100101 Firefox/38.0)',
+                'Host':'d1.web2.qq.com',
+                'Origin':'http://d1.web2.qq.com',
+                'Referer':'http://d1.web2.qq.com/proxy.html?v=20151105001&callback=1&id=2' # 等待检测
+                }
+        data = {
+                'vfwebqq': self.vfwebqq,
+                'clientid': 53999199,
+                'psessionid': self.psessionid
+                }
+        postdata = urllib.urlencode({'r':json.dumps(data)})
+        request = urllib2.Request(url, postdata, headers)
+        html = self.opener.open(request).read()
+        jsonData = json.loads(html)
+        retcode = jsonData['retcode']
+        assert retcode == 0
 
     def installdic(self, arg):
         self.dics = arg
@@ -276,7 +298,6 @@ class Smartqq():
         jsonData = json.loads(html)
         logging.debug(html)
 
-
         retcode = jsonData.get('retcode')
         if retcode == 0 :
             try:
@@ -300,7 +321,8 @@ class Smartqq():
             exit()
         elif retcode == 103:
             logging.error(u'程序出现未知错误, 代码103')
-            sendemail('103错误', u'103错误')
+            sendeoail('103错误', u'103错误')
+            exit()
 
     def send_qun(self, group_uin, content):
         """发送群消息
@@ -358,6 +380,7 @@ class Smartqq():
         self.requestdweb2qq() # d.web2.qq
         #self.get_user_friends2()
         #self.get_group_name()
+        self.get_recent_list2()
         while 1:
             data = self.poll2()
             if data: # 如果有数据，去找字典
