@@ -61,7 +61,7 @@ class Weather(BaseDict):
             return None
 
     def getinfo(self):
-        return """命令: <城市>天气 --认的你
+        return """命令: [城市]天气 --认的你
         南京天气
         北京天气
 """
